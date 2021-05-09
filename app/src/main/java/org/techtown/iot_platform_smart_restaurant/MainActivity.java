@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -18,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         seat_button.setOnClickListener(new View.OnClickListener(){
            @Override
            public void onClick(View view) {
-               Intent intent = new Intent(MainActivity.this, realtime_seats.class);
+               Intent intent = new Intent(MainActivity.this, Realtime_seats.class);
                startActivity(intent);
            }
         });
@@ -27,13 +28,12 @@ public class MainActivity extends AppCompatActivity {
        cooking_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, cooking.class);
+                Intent intent = new Intent(MainActivity.this, Cooking.class);
                 startActivity(intent);
             }
        });
 
-//        만약 테이블을 선택하면
-//                팝업창: 좌석을 예약하시겠습니까?
-//                    예 -> 시간 - +
     }
+
+
 }
