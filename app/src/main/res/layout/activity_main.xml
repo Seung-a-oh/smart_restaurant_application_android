@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:text="모두가 편리한 식당"
         android:textAlignment="center"
-        android:textColor="#FFC73B"
+        android:textColor="#000000"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
