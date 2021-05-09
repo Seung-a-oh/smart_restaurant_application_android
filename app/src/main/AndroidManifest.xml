@@ -10,18 +10,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 <!--        <activity android:name=".booking"></activity>-->
-        <activity android:name=".cooking" />
-        <activity android:name=".realtime_seats" />
-        <activity android:name=".booking"
-                  android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"/>
-        <activity android:name=".MainActivity">
+        <activity android:name=".Cooking" />
+        <activity android:name=".Realtime_seats" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Booking"/>
+<!--            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"/>-->
     </application>
 
 </manifest>
