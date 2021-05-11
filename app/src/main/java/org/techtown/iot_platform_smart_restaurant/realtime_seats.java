@@ -22,6 +22,9 @@ public class Realtime_seats extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.realtime_seats);
 
+        //잔여석 표시하는 코드
+        TextView available = (TextView)findViewById(R.id.textView2);
+        available.setText("0"); //서버에서 받아온 값으로 수정해야함.
 
         Button button1 = (Button)findViewById(R.id.button1);
         button1.setOnClickListener(new View.OnClickListener(){
