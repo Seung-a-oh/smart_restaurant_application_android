@@ -12,12 +12,48 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Booking extends Realtime_seats {
+    int t = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.booking);
+
+        //선택한 좌석 번호 출력
+        TextView booking_ment = (TextView)findViewById(R.id.booking_ment);
+        booking_ment.setText(String.format("%d 번 좌석을 예약하시겠습니까?", seat_number));
+
+
+        Button time_minus = (Button)findViewById(R.id.time_minus);
+        time_minus.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                TextView available = (TextView)findViewById(R.id.time);
+                if (t==10){
+                    ;
+                }
+                else {
+                    available.setText("" + (t - 10));
+                    t -= 10;
+                }
+            }
+        });
+
+        Button time_plus = (Button)findViewById(R.id.time_plus);
+        time_plus.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                TextView available = (TextView)findViewById(R.id.time);
+                if (t==30){
+                    ;
+                }
+                else {
+                    available.setText(""+ (t+10));
+                    t += 10;
+                }
+            }
+        });
 
         //"예" 클릭시 창 닫히고, 토스트 메세지 출력
         Button yes_button = findViewById(R.id.yes_button);
@@ -26,7 +62,7 @@ public class Booking extends Realtime_seats {
             public void onClick(View view) {
                 finish();
                 showToast(String.format("%d번 좌석이 예약되었습니다.", seat_number));
-                //서버에 seat_number의 예약 정보 전송하는 코드 작성 필요
+                //서버에 예약 되었다는 정보 전송하는 코드 작성 필요
             }
         });
 
