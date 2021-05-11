@@ -11,12 +11,7 @@
         android:theme="@style/AppTheme">
 <!--        <activity android:name=".booking"></activity>-->
         <activity android:name=".Cooking" />
-        <activity android:name=".Realtime_seats" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".Realtime_seats" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
