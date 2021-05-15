@@ -3,6 +3,7 @@ package org.techtown.iot_platform_smart_restaurant;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,10 +15,11 @@ import android.widget.Toast;
 public class Booking extends Realtime_seats {
     int t = 10;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+       // requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.booking);
 
         //선택한 좌석 번호 출력
@@ -54,12 +56,15 @@ public class Booking extends Realtime_seats {
                 }
             }
         });
+//      +)t 시간이 지나면 예약 취소, t시간 안에 예약이 이루어지면 바로 취소
+
 
         //"예" 클릭시 창 닫히고, 토스트 메세지 출력
         Button yes_button = findViewById(R.id.yes_button);
         yes_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                YesOrNo[seat_number] = 1;
                 finish();
                 showToast(String.format("%d번 좌석이 예약되었습니다.", seat_number));
                 //서버에 예약 되었다는 정보 전송하는 코드 작성 필요
@@ -71,9 +76,11 @@ public class Booking extends Realtime_seats {
         no_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                YesOrNo[seat_number]=0;
                 finish();
             }
         });
+
     }
 
 
@@ -85,5 +92,6 @@ public class Booking extends Realtime_seats {
         }
         return true;
     }
+
 
 }
