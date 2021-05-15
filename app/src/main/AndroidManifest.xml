@@ -9,7 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<!--        <activity android:name=".booking"></activity>-->
         <activity android:name=".Cooking" />
         <activity android:name=".Realtime_seats" />
         <activity android:name=".MainActivity">
@@ -18,8 +17,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Booking"/>
-<!--            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"/>-->
+        <activity android:name=".Booking"
+            android:theme="@style/Theme.bookingDialog" />
     </application>
-
 </manifest>
