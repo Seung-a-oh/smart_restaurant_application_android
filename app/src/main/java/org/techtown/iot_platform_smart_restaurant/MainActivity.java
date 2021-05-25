@@ -3,6 +3,7 @@ package org.techtown.iot_platform_smart_restaurant;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
        cooking_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, Cooking.class);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://192.168.0.4:8091/stream_simple.html"));
                 startActivity(intent);
             }
        });
