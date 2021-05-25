@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dip"
+    android:layout_width="match_parent"
     android:layout_height="200dip"
     android:background="#E7F0F4"
     android:orientation="vertical"
@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/booking_ment"
-        android:layout_width="300dip"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="70px"
         android:gravity="center"
@@ -20,12 +20,12 @@
         android:textSize="18sp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="300dip"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
-            android:layout_width="300dip"
+            android:layout_width="match_parent"
             android:layout_height="70dip"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +52,7 @@
                 android:id="@+id/time_minus"
                 android:layout_width="37dp"
                 android:layout_height="41dp"
-                android:layout_marginStart="68dp"
+                android:layout_marginStart="80dp"
                 android:layout_marginTop="24dp"
                 android:text="-"
                 android:textAlignment="center"
@@ -68,7 +68,7 @@
                 android:layout_width="37dp"
                 android:layout_height="41dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginEnd="68dp"
+                android:layout_marginEnd="80dp"
                 android:text="+"
                 android:textAlignment="center"
                 android:textColor="#595959"
@@ -81,7 +81,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="300dip"
+            android:layout_width="match_parent"
             android:layout_height="50dip"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -92,7 +92,7 @@
                 android:id="@+id/no_button"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
+                android:layout_marginEnd="60dp"
                 android:backgroundTint="#00FFFFFF"
                 android:text="아니오"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -103,7 +103,7 @@
                 android:id="@+id/yes_button"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
+                android:layout_marginStart="60dp"
                 android:backgroundTint="#00FFFFFF"
                 android:text="예"
                 app:layout_constraintBottom_toBottomOf="parent"
