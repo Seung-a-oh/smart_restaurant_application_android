@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
        cooking_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://192.168.0.4:8091/stream_simple.html"));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://192.168.0.26:8091/stream_simple.html"));
                 startActivity(intent);
             }
        });
