@@ -1,45 +1,64 @@
 package org.techtown.iot_platform_smart_restaurant;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
-import android.content.Context;
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.content.Context;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 
 public class Booking extends Realtime_seats {
-    int t = 10;
+    String time="";
+
+    private AlarmManager alarmManager ;
+    private GregorianCalendar mCalender;
+
+    private NotificationManager notificationManager;
+    NotificationCompat.Builder builder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //알람설정
+        notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+
+        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+
+        mCalender = new GregorianCalendar();
+
+        Log.v("HelloAlarmActivity", mCalender.getTime().toString());
+
+        setContentView(R.layout.activity_main);
+
+
         setContentView(R.layout.booking);
 
         // Create AE and Get AEID
@@ -54,14 +73,13 @@ public class Booking extends Realtime_seats {
             @Override
             public void onClick(View view) {
                 TextView available = (TextView)findViewById(R.id.time);
-                if (t==10){
+                if (t[seat_number]==10){
                     ;
                 }
                 else {
-                    available.setText("" + (t - 10));
-                    t -= 10;
+                    available.setText("" + (t[seat_number] - 10));
+                    t[seat_number] -= 10;
                 }
-
             }
         });
 
@@ -70,17 +88,15 @@ public class Booking extends Realtime_seats {
             @Override
             public void onClick(View view) {
                 TextView available = (TextView)findViewById(R.id.time);
-                if (t==30){
+                if (t[seat_number]==30){
                     ;
                 }
                 else {
-                    available.setText(""+ (t+10));
-                    t += 10;
+                    available.setText(""+ (t[seat_number]+10));
+                    t[seat_number] += 10;
                 }
             }
         });
-//      +)t 시간이 지나면 예약 취소, t시간 안에 예약이 이루어지면 바로 취소
-
 
 
         //"예" 클릭시 창 닫히고, 토스트 메세지 출력
@@ -89,22 +105,22 @@ public class Booking extends Realtime_seats {
             @Override
             public void onClick(View view) {
                 YesOrNo[seat_number] = 1;
-                //onem2m의 파일에서 데이터 받아오기
-//                String br =((onem2m_post_cin)onem2m_post_cin.mContext).test(seat_number);
-                //String booked_resource = Integer.toString(br);
+//                t[seat_number]
+                Calendar setCal = Calendar.getInstance();
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                setCal.add(Calendar.SECOND,30);//시간 추가
+                time = dateFormat.format(setCal.getTime());
+                setAlarm(time);
 
-//                String seat = Integer.toString(seat_number);
-                String br = ((Booked_Table)Booked_Table.mContext).set_table(seat_number);
 
+                //서버에 예약 정보 보내기
+                String br = ((Booked_Tablee)Booked_Tablee.mContext).set_table(seat_number);
                 ControlRequest req = new ControlRequest(br);
                 req.start();
 
+
                 finish();
-                showToast(String.format("%d번 좌석이 예약되었습니다.", seat_number));
-
-//                postReservedTable rsv = new postReservedTable();
-//                rsv.setTable(seat_number);
-
+                showToast(String.format("%d번 좌석이 예약되었습니다.\n%s까지 도착해주세요.", seat_number,time));
             }
         });
 
@@ -120,14 +136,36 @@ public class Booking extends Realtime_seats {
 
     }
 
+    private void setAlarm(String time) {
+        //AlarmReceiver에 값 전달
+        Intent receiverIntent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, receiverIntent, 0);
+
+        String from = time; //임의로 날짜와 시간을 지정
+
+        //날짜 포맷을 바꿔주는 소스코드
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date datetime = null;
+        try {
+            datetime = dateFormat.parse(from);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(datetime);
+
+        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(),pendingIntent);
+
+    }
 
     final String Mobius_Address ="203.253.128.177";
-   // private EditText EditText_Address ="203.253.128.177";
+    // private EditText EditText_Address ="203.253.128.177";
     private static CSEBase csebase = new CSEBase();
     private static AE ae = new AE();
     public Handler handler;
     private static String TAG = "Booking";
-    private String ServiceAEName = "IP-team06";
+    private static String ServiceAEName = "IP-team06";
 
     public interface IReceived {
         void getResponseBody(String msg);
@@ -137,39 +175,39 @@ public class Booking extends Realtime_seats {
         handler = new Handler();
     }
 
-public void GetAEInfo(){
-    //Mobius_Address = EditText_Address.getText().toString();
-    csebase.setInfo("203.253.128.177","7579","Mobius","1883");
+    public void GetAEInfo(){
+        //Mobius_Address = EditText_Address.getText().toString();
+        csebase.setInfo("203.253.128.177","7579","Mobius","1883");
 
-    ae.setAppName("ncube");
-    aeCreateRequest aeCreate = new aeCreateRequest();
-    aeCreate.setReceiver(new IReceived() {
-        public void getResponseBody(final String msg) {
-            handler.post(new Runnable() {
-                public void run() {
-                    Log.d(TAG, "** AE Create ResponseCode[" + msg +"]");
-                    if( Integer.parseInt(msg) == 201 ){
-                        ;
+        ae.setAppName("Lhu6SWCsu4A");
+        aeCreateRequest aeCreate = new aeCreateRequest();
+        aeCreate.setReceiver(new IReceived() {
+            public void getResponseBody(final String msg) {
+                handler.post(new Runnable() {
+                    public void run() {
+                        Log.d(TAG, "** AE Create ResponseCode[" + msg +"]");
+                        if( Integer.parseInt(msg) == 201 ){
+                            ;
+                        }
+                        else { // If AE is Exist , GET AEID
+                            aeRetrieveRequest aeRetrive = new aeRetrieveRequest();
+                            aeRetrive.setReceiver(new IReceived() {
+                                public void getResponseBody(final String resmsg) {
+                                    handler.post(new Runnable() {
+                                        public void run() {
+                                            Log.d(TAG, "** AE Retrive ResponseCode[" + resmsg +"]");
+                                        }
+                                    });
+                                }
+                            });
+                            aeRetrive.start();
+                        }
                     }
-                    else { // If AE is Exist , GET AEID
-                        aeRetrieveRequest aeRetrive = new aeRetrieveRequest();
-                        aeRetrive.setReceiver(new IReceived() {
-                            public void getResponseBody(final String resmsg) {
-                                handler.post(new Runnable() {
-                                    public void run() {
-                                        Log.d(TAG, "** AE Retrive ResponseCode[" + resmsg +"]");
-                                    }
-                                });
-                            }
-                        });
-                        aeRetrive.start();
-                    }
-                }
-            });
-        }
-    });
-    aeCreate.start();
-}
+                });
+            }
+        });
+        aeCreate.start();
+    }
 
     // post ae
     class aeCreateRequest extends Thread {
@@ -304,7 +342,7 @@ public void GetAEInfo(){
     }
 
     //요청 보내기
-    class ControlRequest extends Thread {
+    static class ControlRequest extends Thread {
         private final Logger LOG = Logger.getLogger(ControlRequest.class.getName());
         private IReceived receiver;
         //        private String container_name = "cnt-led";
