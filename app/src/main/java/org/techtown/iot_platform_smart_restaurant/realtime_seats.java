@@ -27,13 +27,13 @@ import fr.arnaudguyon.xmltojsonlib. XmlToJson;
 public class Realtime_seats extends AppCompatActivity {
     public static int seat_number=0;
     public static int[] YesOrNo = new int[7];
+    public static String Using_seat = "";
+    public static int[] t = {0,10,10,10,10,10,10};
+    public static String reservedTable = "000000000000";
 
     public void showToast(String data){
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
-
-    // [코드 작성] 설정 시간(t)이 지나고, 테이블의 이용이 없다면 예약 가능하게 변경.
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +43,13 @@ public class Realtime_seats extends AppCompatActivity {
         GetAEInfo();
 
         final ImageView refresh = (ImageView)findViewById(R.id.refresh);
-        final TextView tt = (TextView)findViewById(R.id.tt);
 
-
- //       String br = ((Booked_Table)Booked_Table.mContext).set_table(seat_number);
-
-        //잔여석 표시하는 코드
-//        TextView available = findViewById(R.id.textView2);
-//        available.setText("16"); //서버에서 받아온 값으로 수정해야함.
+        final Button button1 = findViewById(R.id.button1);
+        final Button button2 = (Button)findViewById(R.id.button2);
+        final Button button3 = (Button)findViewById(R.id.button3);
+        final Button button4 = (Button)findViewById(R.id.button4);
+        final Button button5 = (Button)findViewById(R.id.button5);
+        final Button button6 = (Button)findViewById(R.id.button6);
 
 
         refresh.setOnClickListener(new View.OnClickListener() {
@@ -61,12 +60,57 @@ public class Realtime_seats extends AppCompatActivity {
                     public void getResponseBody(final String msg) {
                         handler.post(new Runnable() {
                             public void run() {
-                              tt.setText(getContainerContentXML(msg));
+
                                 Log.d(TAG, msg);
-                          //    tt.setText("why...");
-//                        if(getContainerContentXML(msg) == "0100000000"){
-//                            button1.setEnabled(false);
-//                        }
+                                reservedTable = getContainerContentXML(msg);
+                                Using_seat = getContainerContentXML(msg);
+
+                                //사용중, 혹은 예약된 좌석을 골라서 비활성화 처리
+                                if(Using_seat.substring(0,1).equals("1") || Using_seat.substring(1,2).equals("1")){
+                                    button1.setEnabled(false);
+                                }
+                                if(Using_seat.substring(2,3).equals("1") || Using_seat.substring(3,4).equals("1")){
+                                    button2.setEnabled(false);
+                                }
+                                if(Using_seat.substring(4,5).equals("1") || Using_seat.substring(5,6).equals("1")){
+                                    button3.setEnabled(false);
+                                }
+                                if(Using_seat.substring(6,7).equals("1") || Using_seat.substring(7,8).equals("1")){
+                                    button4.setEnabled(false);
+                                }
+                                if(Using_seat.substring(8,9).equals("1") || Using_seat.substring(9,10).equals("1")){
+                                    button5.setEnabled(false);
+                                }
+                                if(Using_seat.substring(10,11).equals("1") || Using_seat.substring(11,12).equals("1")){
+                                    button6.setEnabled(false);
+                                }
+
+                                if(Using_seat.substring(0,2).equals("00")){
+                                    button1.setEnabled(true);
+                                    YesOrNo[1] = 0;
+                                }
+                                if(Using_seat.substring(2,4).equals("00") ){
+                                    button2.setEnabled(true);
+                                    YesOrNo[2] = 0;
+                                }
+                                if(Using_seat.substring(4,6).equals("00") ){
+                                    button3.setEnabled(true);
+                                    YesOrNo[3] = 0;
+                                }
+                                if(Using_seat.substring(6,8).equals("00") ){
+                                    button4.setEnabled(true);
+                                    YesOrNo[4] = 0;
+                                }
+                                if(Using_seat.substring(8,10).equals("00") ){
+                                    button5.setEnabled(true);
+                                    YesOrNo[5] = 0;
+                                }
+                                if(Using_seat.substring(10,12).equals("00") ){
+                                    button6.setEnabled(true);
+                                    YesOrNo[6] = 0;
+                                }
+
+
                             }
                         });
                     }
@@ -75,16 +119,7 @@ public class Realtime_seats extends AppCompatActivity {
             }
         });
 
-//        setText 테스트 코드
-//        refresh.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                tt.setText("changed");
-//
-//            }
-//        });
 
-        final Button button1 = findViewById(R.id.button1);
         button1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -95,16 +130,11 @@ public class Realtime_seats extends AppCompatActivity {
                 }
                 Intent intent = new Intent(Realtime_seats.this,
                         Booking.class);
+                getSeat();
                 startActivity(intent);
             }
         });
 
-//        public class Reserved {
-//
-//        }
-
-
-        final Button button2 = (Button)findViewById(R.id.button2);
         button2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -115,11 +145,11 @@ public class Realtime_seats extends AppCompatActivity {
                 }
                 Intent intent = new Intent(Realtime_seats.this,
                         Booking.class);
+                getSeat();
                 startActivity(intent);
             }
         });
 
-        final Button button3 = (Button)findViewById(R.id.button3);
         button3.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -130,11 +160,11 @@ public class Realtime_seats extends AppCompatActivity {
                 }
                 Intent intent = new Intent(Realtime_seats.this,
                         Booking.class);
+                getSeat();
                 startActivity(intent);
             }
         });
 
-        final Button button4 = (Button)findViewById(R.id.button4);
         button4.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -145,12 +175,12 @@ public class Realtime_seats extends AppCompatActivity {
                 }
                 Intent intent = new Intent(Realtime_seats.this,
                         Booking.class);
+                getSeat();
                 startActivity(intent);
 
             }
         });
 
-        final Button button5 = (Button)findViewById(R.id.button5);
         button5.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -161,11 +191,11 @@ public class Realtime_seats extends AppCompatActivity {
                 }
                 Intent intent = new Intent(Realtime_seats.this,
                         Booking.class);
+                getSeat();
                 startActivity(intent);
             }
         });
 
-        final Button button6 = (Button)findViewById(R.id.button6);
         button6.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -176,13 +206,15 @@ public class Realtime_seats extends AppCompatActivity {
                 }
                 Intent intent = new Intent(Realtime_seats.this,
                         Booking.class);
+                getSeat();
                 startActivity(intent);
             }
         });
     }
 
-
-
+    public int getSeat(){
+        return seat_number;
+    }
 
     final String Mobius_Address ="203.253.128.177";
     // private EditText EditText_Address ="203.253.128.177";
@@ -196,8 +228,9 @@ public class Realtime_seats extends AppCompatActivity {
         handler = new Handler();
     }
 
+
+
     public void GetAEInfo(){
-//        Mobius_Address = EditText_Address.getText().toString();
         csebase.setInfo(Mobius_Address,"7579","Mobius","1883");
 
         ae.setAppName("smart_restaurant");
@@ -298,7 +331,6 @@ public class Realtime_seats extends AppCompatActivity {
             } catch (Exception exp) {
                 LOG.log(Level.SEVERE, exp.getMessage());
             }
-
         }
     }
 
@@ -322,10 +354,10 @@ public class Realtime_seats extends AppCompatActivity {
         @Override
         public void run() {
             try {
-               // String sb = csebase.getServiceUrl() + "/" + ServiceAEName + "/" + ContainerName + "/" + "latest";
-                String sb = "http://203.253.128.177:7579/Mobius/IP-team06/usedTable/latest";
+                String sb = csebase.getServiceUrl() + "/" + ServiceAEName + "/" + ContainerName + "/" + "latest";
+//                String sb = "http://203.253.128.177:7579/Mobius/IP-team06/usedTable/latest";
 
-                //csebase.getServiceUrl() + "/" + ServiceAEName + "/" + ContainerName + "/" + "latest";
+//                csebase.getServiceUrl() + "/" + ServiceAEName + "/" + ContainerName + "/" + "latest";
 
                 URL mUrl = new URL(sb);
 
